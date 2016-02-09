@@ -212,16 +212,18 @@ module HamlishLiquid
             attr_reader :tag_name, :attrs
             def initialize(line, offset)
                 super
-                tag_match = /\s*([a-z]+)(\s|$)/.match(
-                    line.code_from_offset(offset),
-                    1
+                code = line.code_from_offset(offset).rstrip
+                tag_match = /\s*([a-z]+)(\s|\z)/.match(
+                    code,
+                    1 # skip '%' character
                 )
                 line.error('bad or missing html tag name') unless tag_match
                 @tag_name = tag_match[1]
+                index_after_tag = tag_match.offset(1)[1]
 
-                if tag_match.offset(0)[1] < line.code.length
+                if  index_after_tag < code.length
                     # there is more code after the tag name
-                    @attrs = get_attrs(tag_match.offset(0))
+                    @attrs = get_attrs(index_after_tag)
                 end
             end
 
