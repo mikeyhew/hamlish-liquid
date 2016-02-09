@@ -1,16 +1,22 @@
 module HamlishLiquid
     class Line
-        attr_reader :indentation, :code, :line_no
+        attr_reader :line_no, :indentation, :code
 
-        def initialize(text, line_no)
+        def self.from_source_line(line_no, text)
             text = text.rstrip
             whitespace_match = /^[\s]+/.match text
             if text =~ /\t/ && text =~ /\t/
                 error 'mixed tab and space indentation'
             end
+            indentation = whitespace_match ? whitespace_match[0].length : 0
+            code = text[indentation..-1]
+            self.new line_no, indentation, code
+        end
+
+        def initialize line_no, indentation, code
             @line_no = line_no
-            @indentation = whitespace_match ? whitespace_match[0].length : 0
-            @code = text[indentation..-1]
+            @indentation = indentation
+            @code = code
         end
 
         def error(message, offset=nil)
@@ -38,7 +44,7 @@ module HamlishLiquid
         line_no = base_line_no
         source_lines.map do |line_str|
             line_no += 1
-            Line.new(line_str, line_no)
+            Line.from_source_line(line_no, line_str)
         end
     end
 
