@@ -1,9 +1,10 @@
 source 'https://rubygems.org'
 gemspec
 ruby '2.2.1'
-group :test do
-    gem 'rubocop', '~>0.37.0'
-    gem 'pry'
+
+group :development do
     gem 'pry-stack_explorer'
     gem 'pry-byebug'
+    gem 'pry'
+    gem 'pry-rescue'
 end

@@ -10,10 +10,10 @@ module HamlishLiquid
             end
             indentation = whitespace_match ? whitespace_match[0].length : 0
             code = text[indentation..-1]
-            self.new line_no, indentation, code
+            new line_no, indentation, code
         end
 
-        def initialize line_no, indentation, code
+        def initialize(line_no, indentation, code)
             @line_no = line_no
             @indentation = indentation
             @code = code
@@ -36,7 +36,9 @@ module HamlishLiquid
         end
 
         def code_from_offset(offset)
-            code[offset[0]..(offset[1] || -1)]
+            # ruby ranges are inclusive, not like
+            # python or javascript slices
+            code[offset[0]..(offset[1] - 1 || -1)]
         end
     end
 
@@ -82,38 +84,32 @@ module HamlishLiquid
     end # def parse_lines
 
     module Node
+        def self._node_type_from_first_char(char)
+            case char
+                when '%' then HtmlTag
+                when '-' then LiquidTag
+                when '=' then Output
+                else require 'pry'; binding.pry; PlainText
+            end
+        end
+
         def self.from_line(line)
             raise if line.code.empty?
-            # offset is array of length 1 or 2
-            offset = [0]
             nodes = []
-            loop do
-                # find first `<<` and update offset if it exists
-                if (sep_match = /\s*<<\s*/.match(line.code, offset[0]))
-                    separator_indices = sep_match.offset(0)
-                    offset[1] = separator_indices[0]
-                    next_offset = [separator_indices[1] + 1]
-                end
-                if line.code[offset[0]..-1].empty?
-                    # the line wasn't empty, so there must have been
-                    # an inline content separator
+            chunks = line.code.split '<<'
+            offset_start = 0
+            chunks.each do |chunk|
+                offset_end = offset_start + chunk.length
+                offset = [offset_start, offset_end]
+                if chunk.strip.empty?
                     line.error('line ends with inline data separator (<<)', offset)
                 end
-                node_type = case line.code[offset[0]]
-                    when '%' then HtmlTag
-                    when '-' then LiquidTag
-                    when '=' then Output
-                    else PlainText
-                end
-
+                code = line.code_from_offset(offset)
+                node_type = _node_type_from_first_char code.lstrip[0]
                 node = node_type.new(line, offset)
                 nodes.push(node)
-                if offset[1]
-                    offset = next_offset
-                    next
-                else
-                    break
-                end
+                # increment offset for '<<'
+                offset_start = offset_end + '<<'.length
             end
             parent = nodes[0]
             nodes[1..-1].each do |node|
@@ -223,6 +219,7 @@ module HamlishLiquid
 
                 if  index_after_tag < code.length
                     # there is more code after the tag name
+                    require 'pry'; binding.pry
                     @attrs = get_attrs(index_after_tag)
                 end
             end

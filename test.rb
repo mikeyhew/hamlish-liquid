@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require './hamlish_liquid'
-
+require 'pry-rescue/minitest' if ENV['DEBUG']
 module HamlishLiquid
     class Line
         def state

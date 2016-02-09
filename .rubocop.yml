@@ -5,7 +5,8 @@ AllCops:
     DisplayCopNames: true
 
 Style/Documentation:
-    Enable: false
+    Exclude:
+        - '*'
 
 Style/IndentationWidth:
     Width: 4
