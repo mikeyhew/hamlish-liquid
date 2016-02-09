@@ -72,29 +72,10 @@ module HamlishLiquid
             block_stack.last.add_child node
             block_stack.push node
         end # lines.each do
+        root
     end # def parse_lines
 
-    class Node
-        attr_reader :line, :children, :offset
-        def initialize(line, offset)
-            @line = line
-            @offset = offset
-        end
-
-        def add_child(child_node)
-            @children ||= []
-            @children.push child_node
-            self
-        end
-
-        def preamble
-            nil
-        end
-
-        def postamble
-            nil
-        end
-
+    module Node
         def self.from_line(line)
             raise if line.code.empty?
             # offset is array of length 1 or 2
@@ -136,13 +117,33 @@ module HamlishLiquid
             nodes[0]
         end # def self.from_line
 
-        class BlockEl < Node
-            def initialize(line, offset)
+        class Base
+            attr_reader :line, :children, :offset
 
+            def initialize(line, offset)
+                @line = line
+                @offset = offset
             end
+
+            def add_child(child_node)
+                @children ||= []
+                @children.push child_node
+                self
+            end
+
+            def preamble
+                nil
+            end
+
+            def postamble
+                nil
+            end
+        end
+
+        class BlockEl < Base
         end # class BlockEl
 
-        class InlineEl < Node
+        class InlineEl < Base
             def add_child(child_node)
                 child_node.line.error(
                     "Node::#{self.class.name} " +
@@ -156,7 +157,7 @@ module HamlishLiquid
             end
         end
 
-        class Root < Node
+        class Root < Base
             def initialize
                 @children = []
             end
@@ -173,7 +174,7 @@ module HamlishLiquid
             end
         end
 
-        class Output < Node
+        class Output < InlineEl
 
             def initialize(line, offset)
                 super
