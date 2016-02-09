@@ -1,0 +1,29 @@
+inherit_from: ./.rubocop_todo.yml
+
+AllCops:
+    TargetRubyVersion: 2.0
+    DisplayCopNames: true
+
+Style/Documentation:
+    Enable: false
+
+Style/IndentationWidth:
+    Width: 4
+
+Style/ExtraSpacing:
+    Enabled: false
+
+Style/TrailingBlankLines:
+    Enabled: false
+
+Style/AccessModifierIndentation:
+    EnforcedStyle: outdent
+
+Style/SpaceAroundEqualsInParameterDefault:
+    EnfocedStyle: no_space
+
+Metrics/LineLength:
+    Enabled: false
+
+Style/TrailingWhitespace:
+    Enabled: false
