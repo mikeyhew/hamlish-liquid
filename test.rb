@@ -12,6 +12,7 @@ end
 include HamlishLiquid
 include Node
 
+# shortcut method
 def p(source)
     HamlishLiquid.parse_source(source)
 end
@@ -43,5 +44,15 @@ describe HamlishLiquid do
     end
     it 'should parse liquid tag with children' do
         ret = HamlishLiquid.parse_source "-for i in [1,2,3]; = i | someFilter"
+    end
+    it 'should parse with inline content' do
+        root = p "%span << %b"
+        assert_equal 1, root.children.length
+        span = root.children[0]
+        expected = {line_no: 1, indentation: 0, code: "%span << %b"}
+        assert_equal expected, span.line.state
+        assert_equal 1, span.children.length
+        b = span.children[0]
+        assert_equal expected, b.line.state
     end
 end
