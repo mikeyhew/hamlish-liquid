@@ -22,6 +22,9 @@ Style/AccessModifierIndentation:
 Style/SpaceAroundEqualsInParameterDefault:
     EnfocedStyle: no_space
 
+Style/SpaceInsideHashLiteralBraces:
+    Enabled: false
+
 Metrics/LineLength:
     Enabled: false
 
