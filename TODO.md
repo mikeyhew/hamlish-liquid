@@ -1,3 +1,5 @@
+# Todo
+
 - output html attributes
 - add syntax improvements
     - `#` and `.` for id and class attributes
@@ -9,3 +11,4 @@
     [ ] parser tests for low-coverage areas like liquid output
     [ ] compiler tests
     [ ] tests for the above new syntax features when they are introduced
+- improve error reporting. Parslet provides some good error information, we just need to use it.
