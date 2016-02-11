@@ -6,7 +6,10 @@ Gem::Specification.new do |s|
     s.license   = 'MIT'
     s.authors   = 'Michael Hewson'
     s.summary   = 'HAML-like syntax for Liquid (github.com/shopify/liquid)'
-
+    s.require_path = 'lib'
+    
+    s.add_runtime_dependency 'parslet'
+    
     s.add_development_dependency 'rake'
     s.add_development_dependency 'minitest'
 end

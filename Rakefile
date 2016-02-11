@@ -1,12 +1,15 @@
 require 'rake'
+require 'rake/testtask'
 
-task default: [:rubocop, :test]
+$LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
 
-task :rubocop do
-    require 'rubocop/rake_task'
-    RuboCop::RakeTask.new
+desc 'run test suite'
+Rake::TestTask.new do |t|
+  t.libs << '.' << 'lib' << 'test'
+  t.test_files = FileList['test/*_test.rb']
+  t.verbose = false
 end
 
-task :test do
-    sh 'ruby test.rb'
+task :console do
+  exec 'irb -I lib -r hamlish_liquid'
 end
