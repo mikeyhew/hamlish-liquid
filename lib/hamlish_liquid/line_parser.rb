@@ -7,7 +7,7 @@ module HamlishLiquid
 
         rule(:html_tag_start)   { str('%') }
         
-        rule(:html_tag_name)    { match['a-z'].repeat(1) }
+        rule(:html_tag_name)    { match['a-zA-Z'] >> match['a-zA-Z0-9'].repeat(1) }
         
         rule(:html_attr_name)   { match['a-z'] >> match['a-z\-'].repeat(0) }
         

@@ -6,6 +6,6 @@ module HamlishLiquid
         rule(:liquid_tag => subtree(:tree))     { LiquidTag.new(tree) }
         rule(:liquid_output => subtree(:tree))  { LiquidOutput.new(tree) }
         rule(:raw => subtree(:text))            { Raw.new(text) }
-        rule(:comment => simple(:text))        { Comment.new(text) }
+        rule(:comment => simple(:text))         { Comment.new(text) }
     end
 end

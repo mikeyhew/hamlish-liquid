@@ -1,10 +1,15 @@
 module HamlishLiquid
 
-    INDENTATION = /\A\s*/
-    TAB_IN_INDENTATION = /\A\s*\t/
-    SPACE_IN_INDENTATION = /\A\s*[ ]/
-
-
+    class HamlishLiquidError < RuntimeError 
+    end
+    class SyntaxError < HamlishLiquidError
+        def initialize(message, line_no, col=nil)
+            maybe_col = col ? ":#{col}" : ''
+            super "#{line_no}#{maybe_col}: #{message}"
+        end
+    end
+    class IndentationError < SyntaxError
+    end
 
     # # parses the source and returns a node tree, starting with
     # # a Node::Root
@@ -53,3 +58,4 @@ require 'hamlish_liquid/line_parser'
 require 'hamlish_liquid/node'
 require 'hamlish_liquid/line_transform'
 require 'hamlish_liquid/parser'
+require 'hamlish_liquid/compiler'

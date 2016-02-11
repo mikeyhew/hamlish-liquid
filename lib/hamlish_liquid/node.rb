@@ -3,9 +3,14 @@ module HamlishLiquid
 
         class Base
             attr_reader :children
+            attr_accessor :has_inline_children
+
+            def initialize(*)
+                has_inline_children = false
+                @children = []
+            end
 
             def add_child(child_node)
-                @children ||= []
                 @children.push child_node
                 self
             end
@@ -16,6 +21,10 @@ module HamlishLiquid
 
             def postamble
                 nil
+            end
+
+            def indent_children?
+                true
             end
         end
 
@@ -32,24 +41,33 @@ module HamlishLiquid
             end
 
             def inline_content
-                nil
+                raise 'Abstact Method'
             end
         end
 
         class Root < Base
+            def indent_children?
+                false
+            end
         end
 
         class Raw < BlockEl
             attr_reader :text
             
             def initialize(text)
+                super
                 @text = text
+            end
+
+            def preamble
+                text
             end
         end
 
         class LiquidOutput < InlineEl
             attr_reader :body
             def initialize(tree)
+                super
                 @body = tree[:body]
                 @body = nil if @body == []
             end
@@ -71,6 +89,7 @@ module HamlishLiquid
             attr_reader :tag_name, :attrs
             
             def initialize(tree)
+                super
                 @tag_name = tree[:tag_name]
                 @attrs = tree[:attrs]
                 # can be nil but not empty
@@ -89,9 +108,10 @@ module HamlishLiquid
         class LiquidTag < BlockEl
             attr_reader :tag_name, :body
             def initialize(tree)
+                super
                 @tag_name = tree[:tag_name]
                 @body = tree[:body]
-                @body = nil if @body && @body.empty?
+                @body = nil if @body && @body.length == 0
             end
 
             def preamble
