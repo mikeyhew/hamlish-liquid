@@ -25,26 +25,33 @@ module HamlishLiquid
 
         def compile_recursive(node, indentation, parent_on_same_line: false)
             raise if node.children.nil?
+            
+            if node.respond_to? :inline_content
+                push ' '*indentation unless parent_on_same_line
+                push node.preamble + ' ' if node.preamble
+                push node.inline_content
+                push ' ' + node.postamble if node.postamble
+                push "\n" unless parent_on_same_line
+                return
+            end
 
             inline_child = node.has_inline_children
 
             push ' '*indentation unless parent_on_same_line
 
-            push node.preamble if node.preamble
-            
-            if node.respond_to? :inline_content
-                push ' ' + node.inline_content + ' '
+            if inline_child
+                push node.preamble if node.preamble
+                compile_recursive node.children[0], indentation, parent_on_same_line: true
             else
+                if node.preamble
+                    push node.preamble
+                    push "\n" unless node.children.empty? 
+                end
 
-                if inline_child
-                    compile_recursive node.children[0], indentation, parent_on_same_line: true
-                else
-                    child_indentation = indentation
-                    child_indentation += 2 if node.indent_children?
-                    push "\n" unless node.children.empty?
-                    node.children.each do |child|
-                        compile_recursive child, child_indentation
-                    end
+                child_indentation = indentation
+                child_indentation += @options[:indent_width] || 2 if node.indent_children?
+                node.children.each do |child|
+                    compile_recursive child, child_indentation
                 end
             end
 
@@ -53,9 +60,9 @@ module HamlishLiquid
                 push node.postamble
             end
             
-            push "\n" unless parent_on_same_line
+            push "\n" unless parent_on_same_line || node == @root
             
-            nil 
+            return
         end # def compile_recursive
     end # class Compiler
 end # class 
