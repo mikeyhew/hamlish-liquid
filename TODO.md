@@ -9,9 +9,9 @@
     - %div= syntax (may be implemented by the above already)
 - add doctype (`!!!`) syntax
 - improve test coverage
-    [ ] parser tests for low-coverage areas like liquid output
-    [ ] compiler tests
-    [ ] tests for the above new syntax features when they are introduced
+    - parser tests for low-coverage areas like liquid output
+    - compiler tests
+    - tests for the above new syntax features when they are introduced
 - improve error reporting. Parslet provides some good error information, we just need to use it.
 - add support for self-closing liquid tags
 - figure out a way to tell if a liquid tag is not self-closing
