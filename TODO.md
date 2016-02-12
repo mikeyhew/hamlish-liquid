@@ -7,7 +7,7 @@
     - consider changing attributes syntax to be like haml, with parentheses required for html-style attributes and support for ruby {foo: bar} and maybe {:foo => bar} syntax
     - with the haml style it would be possible to get rid of << syntax
     - %div= syntax (may be implemented by the above already)
-- add doctype (!!!) syntax
+- add doctype (`!!!`) syntax
 - improve test coverage
     [ ] parser tests for low-coverage areas like liquid output
     [ ] compiler tests
