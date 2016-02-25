@@ -72,4 +72,9 @@ class LineParserTest < Minitest::Test
 
         assert p.parse('-for i in yolo << %div attr="" << stuff')
     end
+
+    def test_xml_name
+        p = parser_from(:xml_name)
+        assert_equal "dáta", p.parse('dáta')
+    end
 end
