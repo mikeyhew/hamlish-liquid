@@ -1,0 +1,40 @@
+GIT
+  remote: git://github.com/haml/haml.git
+  revision: 025b89f421a31cd18db5cacdbcf69cbec893322f
+  specs:
+    haml (5.0.0.beta.2)
+      tilt
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
+    byebug (8.2.2)
+    coderay (1.1.1)
+    debug_inspector (0.0.2)
+    method_source (0.8.2)
+    pry (0.10.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
+    pry-stack_explorer (0.4.9.2)
+      binding_of_caller (>= 0.7)
+      pry (>= 0.9.11)
+    slop (3.6.0)
+    tilt (2.0.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  haml!
+  pry
+  pry-byebug
+  pry-stack_explorer
+
+BUNDLED WITH
+   1.11.2
