@@ -7,6 +7,8 @@ Gem::Specification.new do |s|
     s.authors   = 'Michael Hewson'
     s.summary   = 'HAML-like syntax for Liquid (github.com/shopify/liquid)'
     s.require_path = 'lib'
+    s.executables = ['hamlish-liquid']
+    s.bindir = 'bin'
 
     s.add_runtime_dependency 'haml'
 
