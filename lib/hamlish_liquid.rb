@@ -16,6 +16,10 @@ module HamlishLiquid
             unless node.value[:attributes_hashes].empty?
                 raise SyntaxError, "dynamic attribute values are currently unsupported. Use `attr='{{ value }}'`."
             end
+            if node.value[:parse]
+                node.value[:value] = '{{ ' + node.value[:value] + ' }}'
+                node.value[:parse] = nil
+            end
             node
         end
 

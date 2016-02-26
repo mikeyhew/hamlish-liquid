@@ -20,3 +20,5 @@ Stuff to check out
 
 More stuff to look at
 - `@node.value[:keyword]` is an OK place to put the liquid tag name, but relying on haml to validate `elsif` and `else` seems too lucky to be true.
+- lines with `= somevalue` are working, but the ones with `%div= somevalue` are still evaling instead of printing out the liquid. Find out why.
+^ solved in this commit
